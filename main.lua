@@ -24,7 +24,7 @@ function love.load()
         ['particle'] = love.graphics.newImage('assets/graphics/particle.png')
     }
     
-    push:setupScreen(WINDOW.VIRTUAL_WIDTH, WINDOW.VIRTUAL_WIDTH, WINDOW.WIDTH, WINDOW.HEIGHT, {
+    push:setupScreen(WINDOW.VIRTUAL_WIDTH, WINDOW.VIRTUAL_HEIGHT, WINDOW.WIDTH, WINDOW.HEIGHT, {
         vsync = true,
         fullscreen = false,
         resizable = true
@@ -83,12 +83,11 @@ function love.draw()
     local backgroundWidth = gTextures['background']:getWidth()
     local backgroundHeight = gTextures['background']:getHeight()
 
-    love.graphics.draw(gTextures['background'], 
-        0, 0, 
-        -- no rotation
-        0,
-        WINDOW.VIRTUAL_WIDTH / (backgroundWidth - 1), WINDOW.VIRTUAL_HEIGHT / (backgroundHeight - 1))
-    
+    local scaleX = WINDOW.VIRTUAL_WIDTH / backgroundWidth
+    local scaleY = WINDOW.VIRTUAL_HEIGHT / backgroundHeight
+
+    love.graphics.draw(gTextures['background'], 0, 0, 0, scaleX, scaleY)
+
     gStateMachine:render()
     
     displayFPS()

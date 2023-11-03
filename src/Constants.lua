@@ -1,7 +1,7 @@
 
 WINDOW = {
-    WIDTH = 1360,
-    HEIGHT = 770,
+    WIDTH = 1100,
+    HEIGHT = 620,
     VIRTUAL_WIDTH = 460,
     VIRTUAL_HEIGHT = 260
 }
