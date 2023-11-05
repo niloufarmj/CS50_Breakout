@@ -11,7 +11,14 @@ function StartState:update(dt)
         gSounds['paddle-hit']:play()
     end
 
-    
+    if love.keyboard.keysPressed['enter'] or love.keyboard.keysPressed['return'] then
+        gSounds['confirm']:play()
+
+        if highlighted == 1 then
+            gStateMachine:change('play')
+        end
+    end
+
 end
 
 function StartState:render()
@@ -23,23 +30,25 @@ function StartState:render()
     -- instructions
     love.graphics.setFont(gFonts['medium'])
 
-    -- if we're highlighting 1, render that option blue
-    if highlighted == 1 then
-        love.graphics.setColor(103/255, 1, 1, 1)
-    end
-    love.graphics.printf("START", 0, WINDOW.VIRTUAL_HEIGHT / 2 + 70,
-        WINDOW.VIRTUAL_WIDTH, 'center')
+    local optionY = WINDOW.VIRTUAL_HEIGHT / 2 + 70
 
-    -- reset the color
+    -- Draw option 1
+    if highlighted == 1 then
+        love.graphics.setColor(70/255, 200/255, 1, 1)
+    end
+    love.graphics.printf("START", 0, optionY, WINDOW.VIRTUAL_WIDTH, 'center')
+
+    -- Reset the color
     love.graphics.setColor(1, 1, 1, 1)
 
-    -- render option 2 blue if we're highlighting that one
-    if highlighted == 2 then
-        love.graphics.setColor(103/255, 1, 1, 1)
-    end
-    love.graphics.printf("HIGH SCORES", 0, WINDOW.VIRTUAL_HEIGHT / 2 + 90,
-        WINDOW.VIRTUAL_WIDTH, 'center')
+    optionY = optionY + 20
 
-    -- reset the color
+    -- Draw option 2
+    if highlighted == 2 then
+        love.graphics.setColor(70/255, 200/255, 1, 1)
+    end
+    love.graphics.printf("HIGH SCORES", 0, optionY, WINDOW.VIRTUAL_WIDTH, 'center')
+
+    -- Reset the color
     love.graphics.setColor(1, 1, 1, 1)
 end

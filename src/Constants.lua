@@ -5,3 +5,7 @@ WINDOW = {
     VIRTUAL_WIDTH = 460,
     VIRTUAL_HEIGHT = 260
 }
+
+PADDLE = {
+    SPEED = 200
+}
