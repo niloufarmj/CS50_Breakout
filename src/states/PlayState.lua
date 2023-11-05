@@ -12,16 +12,26 @@ function PlayState:init()
     -- give ball position in the center
     self.ball.x = WINDOW.VIRTUAL_WIDTH / 2 - 4
     self.ball.y = WINDOW.VIRTUAL_HEIGHT - 42
+
+    self.bricks = LevelMaker.createMap()
 end
 
 function PlayState:update(dt)
     
     self.paddle:update(dt)
     self.ball:update(dt)
+    
 
     if self.ball:collides(self.paddle) then
         self.ball.dy = -self.ball.dy
         gSounds['paddle-hit']:play()
+    end
+
+    for k, brick in pairs(self.bricks) do
+        if brick.inPlay and self.ball:collides(brick) then
+            brick:hit()
+            self.ball.dy = -self.ball.dy
+        end
     end
 
 end
@@ -30,5 +40,8 @@ function PlayState:render()
     
     self.paddle:render()
     self.ball:render()
+    for k, brick in pairs(self.bricks) do
+        brick:render()
+    end
 
 end
