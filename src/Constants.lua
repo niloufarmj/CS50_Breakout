@@ -7,5 +7,11 @@ WINDOW = {
 }
 
 PADDLE = {
-    SPEED = 200
+    SPEED = 200,
+    HEIGHT = 16
+}
+
+BALL = {
+    WIDTH = 8, 
+    HEIGHT = 8
 }

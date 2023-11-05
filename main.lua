@@ -1,5 +1,7 @@
 require 'src/Dependencies'
 
+local paused = false
+
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
@@ -25,7 +27,8 @@ function love.load()
     }
 
     gFrames = {
-        ['paddles'] = GenerateQuadsPaddles(gTextures['main'])
+        ['paddles'] = GenerateQuadsPaddles(gTextures['main']),
+        ['balls'] = GenerateQuadsBalls(gTextures['main'])
     }
     
     push:setupScreen(WINDOW.VIRTUAL_WIDTH, WINDOW.VIRTUAL_HEIGHT, WINDOW.WIDTH, WINDOW.HEIGHT, {
@@ -66,7 +69,9 @@ function love.resize(w, h)
 end
 
 function love.update(dt)
-    gStateMachine:update(dt)
+    if not paused then 
+        gStateMachine:update(dt)
+    end
 
     love.keyboard.keysPressed = {}
 end
@@ -75,9 +80,15 @@ end
 function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
 
-    -- we no longer have this globally, so include here
     if key == 'escape' then
         love.event.quit()
+    end
+
+    if key == 'p' and gStateMachine.currentName == 'play' then 
+        paused = not paused
+        if paused then
+            gSounds['pause']:play()
+        end
     end
 end
 

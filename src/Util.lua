@@ -1,20 +1,4 @@
---[[
-    GD50
-    Breakout Remake
 
-    -- StartState Class --
-
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
-
-    Helper functions for writing games.
-]]
-
---[[
-    Given an "atlas" (a texture with multiple sprites), as well as a
-    width and a height for the tiles therein, split the texture into
-    all of the quads by simply dividing it evenly.
-]]
 function GenerateQuads(atlas, tilewidth, tileheight)
     local sheetWidth = atlas:getWidth() / tilewidth
     local sheetHeight = atlas:getHeight() / tileheight
@@ -34,11 +18,7 @@ function GenerateQuads(atlas, tilewidth, tileheight)
     return spritesheet
 end
 
---[[
-    Utility function for slicing tables, a la Python.
 
-    https://stackoverflow.com/questions/24821045/does-lua-have-something-like-pythons-slice
-]]
 function table.slice(tbl, first, last, step)
     local sliced = {}
   
@@ -49,11 +29,7 @@ function table.slice(tbl, first, last, step)
     return sliced
 end
 
---[[
-    This function is specifically made to piece out the paddles from the
-    sprite sheet. For this, we have to piece out the paddles a little more
-    manually, since they are all different sizes.
-]]
+
 function GenerateQuadsPaddles(atlas)
     local x = 0
     local y = 64
@@ -63,25 +39,50 @@ function GenerateQuadsPaddles(atlas)
 
     for i = 0, 3 do
         -- smallest
-        quads[counter] = love.graphics.newQuad(x, y, 32, 16,
+        quads[counter] = love.graphics.newQuad(x, y, 32, PADDLE.HEIGHT,
             atlas:getDimensions())
         counter = counter + 1
         -- medium
-        quads[counter] = love.graphics.newQuad(x + 32, y, 64, 16,
+        quads[counter] = love.graphics.newQuad(x + 32, y, 64, PADDLE.HEIGHT,
             atlas:getDimensions())
         counter = counter + 1
         -- large
-        quads[counter] = love.graphics.newQuad(x + 96, y, 96, 16,
+        quads[counter] = love.graphics.newQuad(x + 96, y, 96, PADDLE.HEIGHT,
             atlas:getDimensions())
         counter = counter + 1
         -- huge
-        quads[counter] = love.graphics.newQuad(x, y + 16, 128, 16,
+        quads[counter] = love.graphics.newQuad(x, y + 16, 128, PADDLE.HEIGHT,
             atlas:getDimensions())
         counter = counter + 1
 
         -- prepare X and Y for the next set of paddles
         x = 0
         y = y + 32
+    end
+
+    return quads
+end
+
+function GenerateQuadsBalls(atlas)
+    local x = 96
+    local y = 48
+
+    local counter = 1
+    local quads = {}
+
+    for i = 0, 3 do
+        quads[counter] = love.graphics.newQuad(x, y, BALL.WIDTH, BALL.HEIGHT, atlas:getDimensions())
+        x = x + BALL.WIDTH
+        counter = counter + 1
+    end
+
+    x = 96
+    y = y + BALL.HEIGHT
+
+    for i = 0, 2 do
+        quads[counter] = love.graphics.newQuad(x, y, BALL.WIDTH, BALL.HEIGHT, atlas:getDimensions())
+        x = x + BALL.WIDTH
+        counter = counter + 1
     end
 
     return quads

@@ -10,7 +10,7 @@ function Paddle:init()
     self.dx = 0
 
     self.width = 64
-    self.height = 16
+    self.height = PADDLE.HEIGHT
 
     self.skin = 1
     self.size = 2
