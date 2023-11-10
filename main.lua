@@ -72,6 +72,9 @@ function love.load()
 
     gStateMachine:change('start', {highScores = loadHighScores()})
 
+    gSounds['music']:play()
+    gSounds['music']:setLooping(true)
+
     love.keyboard.keysPressed = {}
 end
 
@@ -99,8 +102,16 @@ function love.keypressed(key)
         paused = not paused
         if paused then
             gSounds['pause']:play()
+            backgroundMusicPosition = gSounds['music']:tell()
+            gSounds['music']:pause()
+        
+        else
+            gSounds['music']:play()
+            gSounds['music']:seek(backgroundMusicPosition)
         end
     end
+
+    
 end
 
 
