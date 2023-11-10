@@ -46,7 +46,7 @@ end
 
 function Ball:collides(target)
     return not (self.x > target.x + target.width or target.x > self.x + self.width) and 
-        not (self.y > target.y + target.height or target.y > self.y + self.height)
+            not (self.y > target.y + target.height or target.y > self.y + self.height)
 
 end
 
