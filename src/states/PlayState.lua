@@ -6,6 +6,7 @@ function PlayState:enter(params)
     self.health = params.health
     self.score = params.score
     self.ball = params.ball
+    self.level = params.level
 
     -- give ball random starting velocity
     self.ball.dx = math.random(0, 1) == 0 and math.random(-200, -90) or math.random(90, 200)
@@ -42,6 +43,18 @@ function PlayState:update(dt)
             self.score = self.score + (brick.tier * 200 + brick.color * 25)
 
             brick:hit()
+
+            if self:checkVictory() then
+                gSounds['victory']:play()
+
+                gStateMachine:change('victory', {
+                    level = self.level,
+                    paddle = self.paddle,
+                    health = self.health,
+                    score = self.score,
+                    ball = self.ball
+                })
+            end
     
             local ballLeft = self.ball.x + 2
             local ballRight = self.ball.x + 6
@@ -112,4 +125,13 @@ function PlayState:render()
     renderScore(self.score)
     renderHealth(self.health)
 
+end
+
+function PlayState:checkVictory()
+    for _, brick in pairs(self.bricks) do
+        if brick.inPlay then
+            return false
+        end 
+    end
+    return true
 end
