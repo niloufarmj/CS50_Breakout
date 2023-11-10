@@ -1,20 +1,17 @@
 PlayState = Class{__includes = BaseState}
 
-function PlayState:init()
-    self.paddle = Paddle()
+function PlayState:enter(params)
+    self.paddle = params.paddle
+    self.bricks = params.bricks
+    self.health = params.health
+    self.score = params.score
+    self.ball = params.ball
 
-    self.ball = Ball(1)
-
-    -- random speed
+    -- give ball random starting velocity
     self.ball.dx = math.random(0, 1) == 0 and math.random(-200, -90) or math.random(90, 200)
     self.ball.dy = math.random(-50, -80)
-
-    -- give ball position in the center
-    self.ball.x = WINDOW.VIRTUAL_WIDTH / 2 - 4
-    self.ball.y = WINDOW.VIRTUAL_HEIGHT - 42
-
-    self.bricks = LevelMaker.createMap()
 end
+
 
 function PlayState:update(dt)
     
@@ -39,6 +36,9 @@ function PlayState:update(dt)
 
     for k, brick in pairs(self.bricks) do
         if brick.inPlay and self.ball:collides(brick) then
+
+            self.score = self.score + 10
+            
             brick:hit()
     
             local ballLeft = self.ball.x + 2
@@ -67,6 +67,25 @@ function PlayState:update(dt)
         end
     end
 
+    -- if ball goes below bounds, revert to serve state and decrease health
+    if self.ball.y >= WINDOW.VIRTUAL_HEIGHT then
+        self.health = self.health - 1
+        gSounds['hurt']:play()
+
+        if self.health == 0 then
+            gStateMachine:change('game-over', {
+                score = self.score
+            })
+        else
+            gStateMachine:change('serve', {
+                paddle = self.paddle,
+                bricks = self.bricks,
+                health = self.health,
+                score = self.score
+            })
+        end
+    end
+
 end
 
 function PlayState:render()
@@ -76,5 +95,8 @@ function PlayState:render()
     for k, brick in pairs(self.bricks) do
         brick:render()
     end
+
+    renderScore(self.score)
+    renderHealth(self.health)
 
 end

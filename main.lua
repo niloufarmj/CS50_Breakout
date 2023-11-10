@@ -13,7 +13,8 @@ function love.load()
     gFonts = {
         ['small'] = love.graphics.newFont('assets/fonts/font.ttf', 8),
         ['medium'] = love.graphics.newFont('assets/fonts/font.ttf', 16),
-        ['large'] = love.graphics.newFont('assets/fonts/font.ttf', 32)
+        ['large'] = love.graphics.newFont('assets/fonts/font.ttf', 32),
+        ['score'] = love.graphics.newFont('assets/fonts/score-font.ttf', 12)
     }
     love.graphics.setFont(gFonts['small'])
 
@@ -29,7 +30,8 @@ function love.load()
     gFrames = {
         ['paddles'] = GenerateQuadsPaddles(gTextures['main']),
         ['balls'] = GenerateQuadsBalls(gTextures['main']),
-        ['bricks'] = GenerateQuadsBricks(gTextures['main'])
+        ['bricks'] = GenerateQuadsBricks(gTextures['main']),
+        ['hearts'] = GenerateQuads(gTextures['hearts'], 10, 9)
     }
     
     push:setupScreen(WINDOW.VIRTUAL_WIDTH, WINDOW.VIRTUAL_HEIGHT, WINDOW.WIDTH, WINDOW.HEIGHT, {
@@ -58,7 +60,9 @@ function love.load()
 
     gStateMachine = StateMachine {
         ['start'] = function() return StartState() end,
-        ['play'] = function() return PlayState() end
+        ['play'] = function() return PlayState() end,
+        ['serve'] = function () return ServeState() end,
+        ['game-over'] = function () return GameOverState() end
     }
     gStateMachine:change('start')
 
