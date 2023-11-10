@@ -20,25 +20,27 @@ function PlayState:update(dt)
     
 
     if self.ball:collides(self.paddle) then
-        self.ball.y = self.paddle.y - BALL.HEIGHT
+        -- raise ball above paddle in case it goes below it, then reverse dy
+        self.ball.y = self.paddle.y - 8
         self.ball.dy = -self.ball.dy
-    
-        local paddleCenter = self.paddle.x + (self.paddle.width / 2)
-        local ballCenter = self.ball.x
-    
-        if (self.ball.x < paddleCenter and self.paddle.dx < 0) or
-           (self.ball.x > paddleCenter and self.paddle.dx > 0) then
-            self.ball.dx = self.paddle.dx * 50 + (8 * math.abs(paddleCenter - ballCenter))
+
+        -- if we hit the paddle on its left side while moving left...
+        if self.ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
+            self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))
+        
+        -- else if we hit the paddle on its right side while moving right...
+        elseif self.ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
+            self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
         end
-    
+
         gSounds['paddle-hit']:play()
     end
 
     for k, brick in pairs(self.bricks) do
         if brick.inPlay and self.ball:collides(brick) then
 
-            self.score = self.score + 10
-            
+            self.score = self.score + (brick.tier * 200 + brick.color * 25)
+
             brick:hit()
     
             local ballLeft = self.ball.x + 2
@@ -67,6 +69,11 @@ function PlayState:update(dt)
         end
     end
 
+    -- for rendering particle systems
+    for k, brick in pairs(self.bricks) do
+        brick:update(dt)
+    end
+
     -- if ball goes below bounds, revert to serve state and decrease health
     if self.ball.y >= WINDOW.VIRTUAL_HEIGHT then
         self.health = self.health - 1
@@ -92,8 +99,14 @@ function PlayState:render()
     
     self.paddle:render()
     self.ball:render()
+
     for k, brick in pairs(self.bricks) do
         brick:render()
+    end
+
+    -- render all particle systems
+    for k, brick in pairs(self.bricks) do
+        brick:renderParticles()
     end
 
     renderScore(self.score)
