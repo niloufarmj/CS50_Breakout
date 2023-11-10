@@ -18,7 +18,7 @@ BALL = {
 
 function renderHealth(health)
     -- start of our health rendering
-    local healthX = WINDOW.VIRTUAL_WIDTH - 100
+    local healthX = WINDOW.VIRTUAL_WIDTH - 120
     
     -- render health left
     for i = 1, health do
@@ -35,5 +35,5 @@ end
 
 function renderScore(score)
     love.graphics.setFont(gFonts['score'])
-    love.graphics.print('SCORE: ' .. tostring(score), WINDOW.VIRTUAL_WIDTH - 60, 3)
+    love.graphics.print('SCORE: ' .. tostring(score), WINDOW.VIRTUAL_WIDTH - 70, 3)
 end

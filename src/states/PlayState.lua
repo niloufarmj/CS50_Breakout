@@ -7,6 +7,7 @@ function PlayState:enter(params)
     self.score = params.score
     self.ball = params.ball
     self.level = params.level
+    self.highScores = params.highScores
 
     -- give ball random starting velocity
     self.ball.dx = math.random(0, 1) == 0 and math.random(-200, -90) or math.random(90, 200)
@@ -52,7 +53,8 @@ function PlayState:update(dt)
                     paddle = self.paddle,
                     health = self.health,
                     score = self.score,
-                    ball = self.ball
+                    ball = self.ball,
+                    highScores = self.highScores
                 })
             end
     
@@ -94,7 +96,8 @@ function PlayState:update(dt)
 
         if self.health == 0 then
             gStateMachine:change('game-over', {
-                score = self.score
+                score = self.score,
+                highScores = self.highScores
             })
         else
             gStateMachine:change('serve', {
@@ -102,7 +105,8 @@ function PlayState:update(dt)
                 bricks = self.bricks,
                 health = self.health,
                 score = self.score,
-                level = self.level
+                level = self.level,
+                highScores = self.highScores,
             })
         end
     end
@@ -125,6 +129,11 @@ function PlayState:render()
 
     renderScore(self.score)
     renderHealth(self.health)
+
+    if self.highScores == nil then
+        love.graphics.printf('high score is nil :(', 0, WINDOW.VIRTUAL_HEIGHT / 2,
+        WINDOW.VIRTUAL_WIDTH, 'center')
+    end
 
 end
 
