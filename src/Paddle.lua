@@ -1,6 +1,6 @@
 Paddle = Class{}
 
-function Paddle:init()
+function Paddle:init(skin)
     -- x is placed in the middle
     self.x = WINDOW.VIRTUAL_WIDTH / 2 - 32
 
@@ -12,7 +12,7 @@ function Paddle:init()
     self.width = 64
     self.height = PADDLE.HEIGHT
 
-    self.skin = 1
+    self.skin = skin
     self.size = 2
 end
 
